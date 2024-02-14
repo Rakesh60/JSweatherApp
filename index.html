@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Apna शहर का नाम Batao" spellcheck="false">
+            <button><img src="./images/search.png" alt=""></button>
+        </div>
+        <div class="weather">
+            <img src="images/clear.png" alt="" class="weather-icon">
+            <p class="desc"></p>
+            <h1 class="temp">22°</h1>
+            <h4><Span>Feels Like </Span><span class="feels"></span></h4>
+            <h2 class="city">New Delhi</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="./images/humidity.png" alt="">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <!-- <div class="col">
+                    <img src="./images/humidity.png" alt="">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div> -->
+                <div class="col">
+                    <img src="./images/wind.png" alt="">
+                    <div>
+                        <p class="wind">21 km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+</body>
+<script>
+    // let city = document.querySelector("input").value;
+    // console.log(city)
+    // let search = document.querySelector("button");
+    // search.addEventListener('click', function print() {
+    //     console.log(city)
+    // })
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const weatherIcon = document.querySelector(".weather-icon");
+    const apiKey = '479c71a18a25626aff97fefaa56f12a7';
+    const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=';
+    //document.querySelector(".weather").style.opacity = "1";
+
+    async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        var data = await response.json();
+        console.log(data)
+        document.querySelector(".weather").style.opacity = "1";
+
+        document.querySelector(".city").innerHTML = data.name + "🌡" + data.sys.country;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + '°c';
+        document.querySelector(".humidity").innerHTML = data.main.humidity + '%';
+        document.querySelector(".wind").innerHTML = data.wind.speed + ' km/h';
+        document.querySelector(".feels").innerHTML = Math.round(data.main.feels_like) + '°';
+        document.querySelector("desc").innerHTML = data.main.description;
+        if (data.weather[0].main == "Clouds") {
+            weatherIcon.src = "images/clouds.png";
+        }
+        else if (data.weather[0].main == "Clear") {
+            weatherIcon.scr = "images/clear.png";
+        }
+        else if (data.weather[0].main == "Rain") {
+            weatherIcon.scr = "images/rain.png";
+        }
+        else if (data.weather[0].main == "Drizzle") {
+            weatherIcon.scr = "images/drizzle.png";
+        }
+        else if (data.weather[0].main == "Mist") {
+            weatherIcon.scr = "images/mist.png";
+        }
+        else if (data.weather[0].main == "Smoke") {
+            weatherIcon.scr = "images/smoke.png";
+        }
+
+
+
+    }
+
+    searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+
+    })
+    searchBox.addEventListener("keypress", () => {
+        if (event.key === "Enter") {
+            checkWeather(searchBox.value);
+        } else {
+            console.log('Search')
+        }
+
+
+    })
+
+
+
+</script>
+
+</html>
